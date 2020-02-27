@@ -1,68 +1,70 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { Container, Grid } from 'semantic-ui-react'
-import shortid from 'shortid'
+import { useDispatch, useSelector } from 'react-redux'
+import { addPoint } from './reducers/pointReducer'
+import { initScore } from './reducers/scoreReducer'
 import './App.css'
 
 const App = () => {
-  const [score, setScore] = useState(20)
-  const [points, setPoints] = useState([])
+  const dispatch = useDispatch()
+  const score = useSelector(state => state.score)
+  const points = useSelector(state => state.points)
 
   useEffect(() => {
-    const score = parseInt(window.localStorage.getItem('userScore'))
-    if (score) {
-      setScore(score)
-    } else {
-      setScore(20)
-    }
-  }, [])
+    dispatch(initScore())
+  }, [dispatch])
 
-  const play = () => {
-    const value = -1
-    const newScore = score + value
-    window.localStorage.setItem('userScore', newScore)
-    setScore(newScore)
-    const pointObject = {
-      value,
-      id: shortid.generate()
-    }
-    setPoints(points.concat(pointObject))
+  const play = async () => {
+    dispatch(addPoint())
   }
 
-  const remove = (id) => {
-    console.log('halutaan poistaa indeksi', id)
-    setPoints(points.filter(point => point.id !== id))
-  }
-
-  console.log('pojot', points)
+  const negative = points.filter(point => point.value < 0)
+  const positive = points.filter(point => point.value > 0)
 
   return (
     <Container>
       <Grid>
-        <Grid.Row columns={3}>
+        <Grid.Row columns={2}>
           <Grid.Column>
-            <h1>Clicker game</h1>
+            <h1>Clicker</h1>
           </Grid.Column>
           <Grid.Column>
-          </Grid.Column>
-          <Grid.Column>
-            <h1 style={{ textAlign: 'right' }}>Your score: {score}</h1>
+            <h1 style={{ textAlign: 'right' }}>Score: {score}</h1>
           </Grid.Column>
         </Grid.Row>
-        <Grid.Row columns={3}>
-          <Grid.Column>
-          </Grid.Column>
-          <Grid.Column>
-            {points.map(point => (
+      </Grid>
+      <div style={{ paddingTop: '100px' }}>
+        <button className='playButton' onClick={play}>PLAY</button>
+      </div>
+      <Grid>
+        <Grid.Row columns={2}>
+          <Grid.Column floated='left' width={4}>
+            {negative.map(point => (
               <div key={point.id} className='animationWrapper'>
-                <h2 className='score' onAnimationEnd={() => remove(point.id)}>{point.value}</h2>
+                <h2 className='score'
+                  style={{ color: 'red' }}
+                  onAnimationEnd={() => dispatch({ type: 'REMOVE_POINT', pointId: point.id })}
+                >
+                  {point.value}
+                </h2>
               </div>
             )
             )}
           </Grid.Column>
-          <Grid.Column>
+          <Grid.Column floated='right' width={4}>
+            {positive.map(point => (
+              <div key={point.id} className='animationWrapper'>
+                <h2 className='score'
+                  style={{ color: 'green' }}
+                  onAnimationEnd={() => dispatch({ type: 'REMOVE_POINT', pointId: point.id })}
+                >
+                  {point.value}
+                </h2>
+              </div>
+            )
+            )}
           </Grid.Column>
         </Grid.Row>
-        <button className='playButton' onClick={play}>PLAY</button>
       </Grid>
     </Container>
   )
