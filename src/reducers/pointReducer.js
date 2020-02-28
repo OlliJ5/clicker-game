@@ -1,8 +1,8 @@
 import axios from 'axios'
 import shortid from 'shortid'
+import { addScore } from './scoreReducer'
 
 const pointReducer = (state = [], action) => {
-  console.log('state:', state, 'action', action)
   switch (action.type) {
     case 'ADD_POINT':
       return state.concat(action.data)
@@ -15,22 +15,44 @@ const pointReducer = (state = [], action) => {
 
 export const addPoint = () => {
   return async dispatch => {
-    const res = await axios.post('/score/click')
-    const value = res.data.prize
+    const res = await axios.post('/counter/click')
+    const prize = res.data.prize
 
-    dispatch({
-      type: 'ADD_SCORE',
-      data: value
-    })
+    const message = res.data.clicksToWin > 0
+      ? `${res.data.clicksToWin} clicks to a prize`
+      : `You won ${prize}`
 
-    const point = {
-      value,
+    dispatch(addScore(prize - 1))
+
+    const notiId = shortid.generate()
+    dispatch({ type: 'ADD_NOTIFICATION', data: { message, id: notiId } })
+
+    setTimeout(() => {
+      dispatch({ type: 'REMOVE_NOTIFICATION', notiId })
+    }, 3000)
+
+    //the point for playing or -1
+    const participationPoint = {
+      value: -1,
       id: shortid.generate(),
     }
     dispatch({
       type: 'ADD_POINT',
-      data: point
+      data: participationPoint
     })
+
+    //dispatch another if the player actually wins something
+    if (prize > 0) {
+      const prizePoint = {
+        value: prize,
+        id: shortid.generate(),
+      }
+      dispatch({
+        type: 'ADD_POINT',
+        data: prizePoint
+      })
+
+    }
   }
 }
 

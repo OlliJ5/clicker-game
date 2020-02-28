@@ -6,10 +6,12 @@ import { Provider } from 'react-redux'
 import pointReducer from './reducers/pointReducer'
 import App from './App'
 import scoreReducer from './reducers/scoreReducer'
+import notificationReducer from './reducers/notificationReducer'
 
 const reducer = combineReducers({
   points: pointReducer,
-  score: scoreReducer
+  score: scoreReducer,
+  notifications: notificationReducer
 })
 
 const store = createStore(reducer, applyMiddleware(thunk))

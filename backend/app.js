@@ -4,15 +4,27 @@ const bodyParser = require('body-parser')
 const morgan = require('morgan')
 const mongoose = require('mongoose')
 
-const scoreRouter = require('./score')
+const counter = require('./counter')
 
 const app = express()
 
 console.log('connecting to', config.MONGODB_URI)
 
-mongoose.connect(config.MONGODB_URI, { useNewUrlParser: true })
-  .then(() => {
+mongoose.connect(config.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(async () => {
     console.log('connected to MongoDB')
+    const Counter = counter.Counter
+
+    const counterExists = await Counter.findOne({})
+
+    //make a counter if there isn't one
+    if (!counterExists) {
+      console.log('luodaan uusi countteri')
+      const newCounter = new Counter({
+        value: 0
+      })
+      newCounter.save()
+    }
   })
   .catch((error) => {
     console.log('error connection to MongoDB:', error.message)
@@ -22,6 +34,6 @@ mongoose.connect(config.MONGODB_URI, { useNewUrlParser: true })
 app.use(bodyParser.json())
 app.use(morgan('tiny'))
 
-app.use('/score', scoreRouter)
+app.use('/counter', counter.counterRouter)
 
 module.exports = app

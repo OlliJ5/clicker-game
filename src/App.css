@@ -8,8 +8,8 @@
     border: 10px double #cc0000;
     font-size: 20px;
     outline: none;
-    margin: auto;
-    display: block;
+    position: relative;
+    left: -50%;
 }
 
 .playButton:active {
@@ -19,12 +19,12 @@
 }
 
 .animationWrapper {
-    animation: wobble 1s;
+    animation: wobble 1.5s;
 }
 
 .score {
     text-align: center;
-    animation: up 1s;
+    animation: up 1.5s;
 }
 
 @keyframes up {
@@ -47,4 +47,13 @@
     66% {
         transform: translateX(5px);
     }
+}
+
+.notification {
+    background-color: darkslateblue;
+    border-radius: 4px;
+    color: #ffffff;
+    padding: 16px;
+    font-size: 18px;
+    background-position: 20px;
 }
