@@ -3,6 +3,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const morgan = require('morgan')
 const mongoose = require('mongoose')
+const cors = require('cors')
 
 const counter = require('./counter')
 
@@ -30,7 +31,7 @@ mongoose.connect(config.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology
     console.log('error connection to MongoDB:', error.message)
   })
 
-
+app.use(cors())
 app.use(bodyParser.json())
 app.use(morgan('tiny'))
 

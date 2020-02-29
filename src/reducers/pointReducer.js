@@ -15,7 +15,7 @@ const pointReducer = (state = [], action) => {
 
 export const addPoint = () => {
   return async dispatch => {
-    const res = await axios.post('/counter/click')
+    const res = await axios.post('https://cryptic-cliffs-66031.herokuapp.com/counter/click')
     const prize = res.data.prize
 
     //Change the score of the player
