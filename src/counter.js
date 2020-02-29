@@ -2,7 +2,6 @@ import axios from 'axios'
 
 let baseUrl = ''
 
-console.log('envi', process.env.NODE_ENV)
 if (process.env.NODE_ENV === 'production') {
   baseUrl = 'https://cryptic-cliffs-66031.herokuapp.com'
 }
