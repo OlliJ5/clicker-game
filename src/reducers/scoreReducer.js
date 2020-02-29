@@ -9,7 +9,7 @@ const scoreReducer = (state = 0, action) => {
 
 export const initScore = () => {
   const score = parseInt(window.localStorage.getItem('userScore'))
-  if(!score && score !== 0) {
+  if (!score && score !== 0) {
     console.log('scoreksi laitetaan 20')
     window.localStorage.setItem('userScore', 20)
   }

@@ -1,5 +1,5 @@
 const notificationReducer = (state = [], action) => {
-  switch(action.type) {
+  switch (action.type) {
     case 'ADD_NOTIFICATION':
       return state.concat(action.data)
     case 'REMOVE_NOTIFICATION':
