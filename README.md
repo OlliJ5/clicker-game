@@ -1,9 +1,7 @@
-TO DO:
-* Instructions to run app locally
-
 # Clicker game
 
 App is running [here](https://ollij5.github.io/clicker-game/)
+
 The counter can be inspected [here](https://cryptic-cliffs-66031.herokuapp.com/counter)
 
 There is a global counter that all players increment when they click on the play button. Every 500 clicks, someone wins 250 points.
@@ -47,7 +45,7 @@ Create .env file
 touch .env
 ```
 
-Add variables to env
+Add variables to .env
 ```
 PORT=3003
 MONGODB_URI={URI to a MongoDB database here}
@@ -57,3 +55,5 @@ start the backend
 ```
 npm start
 ```
+
+Now head to http://localhost:3000/ and you can play locally
