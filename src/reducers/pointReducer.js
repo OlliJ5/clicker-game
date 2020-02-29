@@ -1,4 +1,4 @@
-import axios from 'axios'
+import counter from '../counter'
 import shortid from 'shortid'
 import { addScore } from './scoreReducer'
 
@@ -15,15 +15,15 @@ const pointReducer = (state = [], action) => {
 
 export const addPoint = () => {
   return async dispatch => {
-    const res = await axios.post('https://cryptic-cliffs-66031.herokuapp.com/counter/click')
-    const prize = res.data.prize
+    const res = await counter.click()
+    const prize = res.prize
 
     //Change the score of the player
     dispatch(addScore(prize - 1))
 
     //Set a notification about the win or how many clicks left
     const message = prize === 0
-      ? `${res.data.clicksToWin} clicks to a prize!`
+      ? `${res.clicksToWin} clicks to a prize!`
       : `You won ${prize} points!`
 
     const notiId = shortid.generate()
